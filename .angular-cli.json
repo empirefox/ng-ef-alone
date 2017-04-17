@@ -9,7 +9,12 @@
       "outDir": "dist",
       "assets": [
         "assets",
-        "favicon.ico"
+        "favicon.ico",
+        {
+          "glob": "bytesize-symbols.min.svg",
+          "input": "../node_modules/bytesize-icons/dist/",
+          "output": "./svg4e/"
+        }
       ],
       "index": "index.html",
       "main": "main.ts",
@@ -19,6 +24,7 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
+        "../node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
         "styles.css"
       ],
       "scripts": [],

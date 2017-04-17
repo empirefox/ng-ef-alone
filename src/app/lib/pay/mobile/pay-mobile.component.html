@@ -1,0 +1,55 @@
+<ng-template [ngIf]="tplTr">
+
+  <md-toolbar color="primary">
+
+    <span class="pay-title">{{tplTr.amountTip}} <b>{{amount}}</b> {{tr.unit}}</span>
+    <span class="flex-spacer"></span>
+    <button md-icon-button color="warn" (click)="onDismiss()"><md-icon>close</md-icon></button>
+
+    <md-toolbar-row>
+      <span>{{tplTr.selected}}</span>
+      <svg [efSymbol]="efSymbol(method)"></svg>
+      <span class="flex-spacer"></span>
+      <button md-raised-button color="accent" [disabled]="!valid" (click)="xxxxxxxxxx">{{tplTr.paying[paying]}}</button>
+    </md-toolbar-row>
+
+  </md-toolbar>
+
+  <div *ngIf="hasServerError" class="pay-failed">
+    <p>{{tplTr.failed}}</p>
+    <ef-field-errors *ngFor="let error of errors.array" [field]="error" [styles]="errorStyles"></ef-field-errors>
+  </div>
+
+  <md-toolbar>
+    <span>{{tplTr.available}}</span>
+
+    <ng-template ngFor let-item [ngForOf]="methods">
+      <md-toolbar-row *ngIf="canThenTr(item) as itemTr" (click)="onChoose(item)" [ngClass]="methodClass(item)">
+        <svg [efSymbol]="efSymbol(item)"></svg>
+        <div>
+          {{itemTr.name}}
+          <p *ngIf="showBanlance(item,itemTr)">
+            {{itemTr.banlance[enoughCash]}}
+            <em>{{itemTr.decimal ? (user.cash|number:itemTr.decimal) : user.cash}}</em>
+          </p>
+        </div>
+      </md-toolbar-row>
+    </ng-template>
+
+  </md-toolbar>
+
+  <ul class="pay-methods">
+    <ng-template ngFor let-item [ngForOf]="methods">
+      <li *ngIf="canThenTr(item) as itemTr" (click)="onChoose(item)" [ngClass]="methodClass(item)">
+        <svg [efSymbol]="efSymbol(item)"></svg>
+        <div>
+          {{itemTr.name}}
+          <p *ngIf="showBanlance(item,itemTr)">
+            {{itemTr.banlance[enoughCash]}}
+            <em>{{itemTr.decimal ? (user.cash|number:itemTr.decimal) : user.cash}}</em>
+          </p>
+        </div>
+      </li>
+    </ng-template>
+  </ul>
+</ng-template>
