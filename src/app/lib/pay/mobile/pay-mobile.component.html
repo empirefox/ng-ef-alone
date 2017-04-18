@@ -1,55 +1,60 @@
 <ng-template [ngIf]="tplTr">
-
-  <md-toolbar color="primary">
-
-    <span class="pay-title">{{tplTr.amountTip}} <b>{{amount}}</b> {{tr.unit}}</span>
+  <md-toolbar>
     <span class="flex-spacer"></span>
     <button md-icon-button color="warn" (click)="onDismiss()"><md-icon>close</md-icon></button>
-
-    <md-toolbar-row>
-      <span>{{tplTr.selected}}</span>
-      <svg [efSymbol]="efSymbol(method)"></svg>
-      <span class="flex-spacer"></span>
-      <button md-raised-button color="accent" [disabled]="!valid" (click)="xxxxxxxxxx">{{tplTr.paying[paying]}}</button>
-    </md-toolbar-row>
-
   </md-toolbar>
 
-  <div *ngIf="hasServerError" class="pay-failed">
-    <p>{{tplTr.failed}}</p>
+  <div class="flex-row">
+
+    <md-card class="flex-card flex-basic">
+      <md-toolbar color="primary">{{tplTr.available}}</md-toolbar>
+      <md-card-content>
+        <md-nav-list>
+          <ng-template ngFor let-item [ngForOf]="items">
+            <md-list-item [disableRipple]="!item.banlanceOk" (click)="onChoose(item)" [ngClass]="methodClass(item)">
+              <md-icon md-list-icon>
+                <svg [efSymbol]="item.efSymbol"></svg>
+              </md-icon>
+              <span md-line>{{item.tr.name}}</span>
+              <span *ngIf="item.config.banlance" md-line class="secondary-line">{{item.banlance}}</span>
+              <button md-icon-button><md-icon>check</md-icon></button>
+            </md-list-item>
+          </ng-template>
+        </md-nav-list>
+      </md-card-content>
+    </md-card>
+
+    <md-card class="flex-card flex-basic">
+      <md-toolbar *ngIf="order.desc" color="primary">{{order.desc}}</md-toolbar>
+      <md-card-content *ngIf="now">
+        <h4>{{tplTr.amountTip}} <b class="amount">{{now.amount}}{{now.tr.unit}}</b></h4>
+        {{tplTr.selected}}
+        <div class="current">
+          <md-icon md-list-icon>
+            <svg [efSymbol]="now.efSymbol"></svg>
+          </md-icon>
+          {{now.tr.name}}
+        </div>
+        <md-input-container [class.hide]="!now.showPaykey">
+          <input mdInput [placeholder]="tplTr.paykeyLabel" [formControl]="keyControl">
+        </md-input-container>
+        <md-card-actions align="end">
+          <button *ngIf="now.gotoPaykeyLabel as label; else checkoutBlock" md-raised-button (click)="gotoSetPayKey()">{{label}}</button>
+          <ng-template #checkoutBlock>
+            <button *ngIf="paying; else payingBlock" [disabled]="!valid" md-fab color="accent" (click)="onCheckout()"><md-icon class="md-24">check</md-icon></button>
+          </ng-template>
+          <ng-template #payingBlock>
+            <md-spinner class="spinner" color="accent"></md-spinner>
+          </ng-template>
+        </md-card-actions>
+      </md-card-content>
+    </md-card>
+
+  </div>
+
+  <div *ngIf="hasServerError" class="server-errors">
+    <md-error>{{tplTr.failed}}</md-error>
     <ef-field-errors *ngFor="let error of errors.array" [field]="error" [styles]="errorStyles"></ef-field-errors>
   </div>
 
-  <md-toolbar>
-    <span>{{tplTr.available}}</span>
-
-    <ng-template ngFor let-item [ngForOf]="methods">
-      <md-toolbar-row *ngIf="canThenTr(item) as itemTr" (click)="onChoose(item)" [ngClass]="methodClass(item)">
-        <svg [efSymbol]="efSymbol(item)"></svg>
-        <div>
-          {{itemTr.name}}
-          <p *ngIf="showBanlance(item,itemTr)">
-            {{itemTr.banlance[enoughCash]}}
-            <em>{{itemTr.decimal ? (user.cash|number:itemTr.decimal) : user.cash}}</em>
-          </p>
-        </div>
-      </md-toolbar-row>
-    </ng-template>
-
-  </md-toolbar>
-
-  <ul class="pay-methods">
-    <ng-template ngFor let-item [ngForOf]="methods">
-      <li *ngIf="canThenTr(item) as itemTr" (click)="onChoose(item)" [ngClass]="methodClass(item)">
-        <svg [efSymbol]="efSymbol(item)"></svg>
-        <div>
-          {{itemTr.name}}
-          <p *ngIf="showBanlance(item,itemTr)">
-            {{itemTr.banlance[enoughCash]}}
-            <em>{{itemTr.decimal ? (user.cash|number:itemTr.decimal) : user.cash}}</em>
-          </p>
-        </div>
-      </li>
-    </ng-template>
-  </ul>
 </ng-template>

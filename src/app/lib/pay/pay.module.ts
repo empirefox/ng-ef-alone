@@ -8,6 +8,7 @@ import { SVG4E_DEP, Svg4eModule } from '../svg4e';
 
 import { PAY_HTTP } from './models/token';
 import { PayConfig } from './models';
+import { WxService, PayService } from './services';
 import { PayMobileComponent } from './mobile/pay-mobile.component';
 
 @NgModule({
@@ -20,6 +21,7 @@ import { PayMobileComponent } from './mobile/pay-mobile.component';
   exports: [
     XlangModule,
     Svg4eModule,
+    PayMobileComponent,
   ]
 })
 export class PayModule {
@@ -28,9 +30,10 @@ export class PayModule {
     return {
       ngModule: PayModule,
       providers: [
+        WxService,
+        PayService,
         { provide: PayConfig, useValue: config },
         { provide: PAY_HTTP, useExisting: useExistingHttp },
-        { provide: SVG4E_DEP, useValue: 'bytesize-icons', multi: true },
         { provide: SVG4E_DEP, useValue: 'ef-pay', multi: true },
       ]
     };

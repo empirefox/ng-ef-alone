@@ -1,9 +1,13 @@
+import { PayMethod } from './pay-method';
+
 export class PayConfig {
+  recommend?: PayMethod;
   tplXjsonId: string;
   formXjsonId: string;
+  paykeyPattern: string;
   postPayCashUrl: string;
   postPayPointsUrl: string;
-  wx: IWxPayConfig;
+  wepay: IWxPayConfig;
 }
 
 export interface IWxPayConfig {

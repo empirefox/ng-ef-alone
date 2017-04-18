@@ -3,26 +3,36 @@
   "amountTip": "Total amount",
   "selected": "The selected is:",
   "available": "Choose a pay method",
-  "paying": {
-    "true": "Paying...",
-    "false": "Pay Now"
-  },
+  "paykeyLabel": "Please input pay key",
+  "gotoPaykeyLabel": "Set pay key",
   "methods": [
-    "cash",
-    "points",
+    "alipay",
     "wepay",
-    "alipay"
+    "cash",
+    "points"
   ],
   "cash": {
     "unit": "dollor",
     "name": "Cash",
-    "decimal": "1.2-2",
     "balance": {
-      "true": "Cash avilible",
-      "false": "Cash not enough!"
+      "all": "Avilible cash ",
+      "failed": "(Not enough)"
     }
   },
-  "points": "point",
-  "wepay": "dolor",
-  "alipay": "dolor"
+  "points": {
+    "unit": "points",
+    "name": "Points",
+    "balance": {
+      "all": "Avilible points ",
+      "failed": "(Not enough)"
+    }
+  },
+  "wepay": {
+    "unit": "dollor",
+    "name": "Wepay"
+  },
+  "alipay": {
+    "unit": "dollor",
+    "name": "Alipay"
+  }
 }

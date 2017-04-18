@@ -19,7 +19,7 @@ export class WxService {
   constructor(
     @Inject(PAY_HTTP) private http: IHttp,
     private payConfig: PayConfig) {
-    this.config = payConfig.wx;
+    this.config = payConfig.wepay;
   }
 
   // qr code if success

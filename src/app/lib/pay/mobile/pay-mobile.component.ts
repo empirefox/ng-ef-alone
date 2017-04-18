@@ -1,8 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { DecimalPipe, Location } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 import { Response } from '@angular/http';
 import { FormControl, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
@@ -10,84 +9,106 @@ import { ua } from '../../common';
 import { FieldErrorsStyles, FieldsErrors, ServerErrorFormatService } from '../../error';
 import { XlangJsonService } from '../../xlang';
 
-import { PayUser, PayOrder, PayMethod, PayConfig } from '../models';
+import {
+  PayUser, PayOrder,
+  PayConfig,
+  PayMethod,
+  PayMethodConfig, defaultPaySequence, payMethodConfigs, PayMethodTranslate,
+} from '../models';
 import { PayService, WxService } from '../services';
+
+interface ViewPayItem {
+  method: PayMethod;
+  config: PayMethodConfig;
+  tr: PayMethodTranslate;
+  efSymbol: string;
+  amount: string | number;
+  banlance: string;
+  banlanceOk: boolean;
+  showPaykey: boolean;
+  gotoPaykeyLabel: string;
+  valid: boolean;
+}
 
 @Component({
   selector: 'ef-pay-mobile',
   templateUrl: './pay-mobile.component.html',
-  styleUrls: ['./pay-mobile.component.css']
+  styleUrls: ['./pay-mobile.component.scss']
 })
 export class PayMobileComponent implements OnInit, OnDestroy {
 
   @Input() user: PayUser;
   @Input() order: PayOrder;
   @Input() enable: PayMethod;
-  @Input() formXjsonId: string;
 
   @Output() close = new EventEmitter<any>();
   @Output() setPaykey = new EventEmitter<PayOrder>();
   @Output() paid = new EventEmitter<Response>();
 
-  // TODO
-  errors: FieldsErrors;
-  errorStyles: FieldErrorsStyles;
-
   tplTr: any;
+  now: ViewPayItem; // TODO not none forever
+  items: ViewPayItem[];
 
-  Method = PayMethod;
-  method = PayMethod.NONE; // TODO not none forever
-  methods: Set<PayMethod>;
-  hasServerError: boolean;
   key: string;
-  keyControl: FormControl = new FormControl('', [Validators.required, Validators.minLength(6)]);
+  keyControl: FormControl;
+
   paying: boolean;
+  hasServerError: boolean;
+  errorStyles: FieldErrorsStyles; // TODO
+  errors: FieldsErrors;
 
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
   constructor(
     private decimalPipe: DecimalPipe,
-    private location: Location,
-    private route: ActivatedRoute,
-    private router: Router,
     private serverErrorFormatService: ServerErrorFormatService,
     private xlangJsonService: XlangJsonService,
     private config: PayConfig,
     private payService: PayService,
     private wxService: WxService) { }
 
-  get accept() {
-    return this.enable & this.order.accept;
-  }
-
   get valid(): boolean | number {
-    switch (this.method) {
-      case PayMethod.wepay:
-        return this.accept & PayMethod.wepay;
-      case PayMethod.alipay:
-        return this.accept & PayMethod.alipay;
-      case PayMethod.cash:
-        return this.accept & PayMethod.cash && this.enough(PayMethod.cash) && this.keyControl.valid;
-      case PayMethod.points:
-        return this.accept & PayMethod.points && this.enough(PayMethod.points) && this.keyControl.valid;
-      default:
-        return 0;
-    }
-  }
-
-  get tr() { return this.tplTr[PayMethod[this.method]]; }
-
-  get amount() {
-    const decimal = this.tr.decimal;
-    const amount = this.order.amount;
-    return decimal ? this.decimalPipe.transform(amount, decimal) : amount;
+    const keyValid = !this.now.config.paykey || this.keyControl.valid;
+    return keyValid && this.now.valid;
   }
 
   ngOnInit() {
+    this.keyControl = new FormControl('', [Validators.required, Validators.pattern(this.config.paykeyPattern)]);
+
     this.xlangJsonService.load(this.config.tplXjsonId).takeUntil(this.ngUnsubscribe).subscribe(tplTr => {
+      this.items = (<string[]>tplTr.methods).map<ViewPayItem>(m => {
+        const method: PayMethod = PayMethod[m];
+        const accepted = this.enable & this.order.accept & method;
+        if (method && accepted) {
+          const config = payMethodConfigs[method];
+          const tr: PayMethodTranslate = tplTr[m];
+
+          const decimal = payMethodConfigs[this.now.method].decimal;
+          const amount = this.order.amount;
+
+          let banlance: string;
+          if (config.banlance) {
+            const { all = '', failed = '' } = config.banlance && tr.banlance || {};
+            const bn: number = this.user[m] || 0;
+            const bv = decimal ? this.decimalPipe.transform(bn, decimal) : bn;
+            banlance = `${all}${bv}${tr.unit}${failed}`;
+          }
+
+          const banlanceOk = !config.banlance || this.user[m] >= amount;
+          return {
+            method, config, tr,
+            efSymbol: `ef-pay#ef-pay-${m}`,
+            amount: decimal ? this.decimalPipe.transform(amount, decimal) : amount,
+            banlance,
+            banlanceOk,
+            showPaykey: config.paykey && this.user.hasPayKey,
+            gotoPaykeyLabel: config.paykey && !this.user.hasPayKey && tplTr.paykeyLabel,
+            valid: accepted && banlanceOk,
+          };
+        }
+      }).filter(m => m);
+      this.now = this.now || this.defaultMethod();
       this.tplTr = tplTr;
-      const methods = (<string[]>tplTr.methods).map<PayMethod>(m => PayMethod[m]).filter(m => m);
-      this.methods = new Set(methods);
     });
   }
 
@@ -96,37 +117,15 @@ export class PayMobileComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  canThenTr(method: PayMethod) {
-    return this.accept & method ? this.tplTr[PayMethod[method]] : 0;
-  }
-
-  onChoose(method: PayMethod) {
-    this.method = this.banlanceOk(method) && method || this.method;
-  }
-
-  enough(method: PayMethod): boolean {
-    return this.user[PayMethod[method]] >= this.order.amount;
-  }
-
-  showBanlance(method: PayMethod, tr: any) {
-    return PayMethod.HAS_BANLANCE | method && tr.banlance;
-  }
-
-  banlanceOk(method: PayMethod) {
-    const checkBanlance = PayMethod.HAS_BANLANCE | method;
-    return checkBanlance ? checkBanlance && this.enough(method) : true;
-  }
-
-  methodClass(method: PayMethod) {
+  methodClass(item: ViewPayItem) {
     return {
-      'pay-method': true,
-      selected: this.method === method,
-      disabled: !this.banlanceOk(method),
+      active: this.now === item,
+      disabled: !item.banlanceOk,
     };
   }
 
-  efSymbol(method: PayMethod) {
-    return `ef-pay#ef-pay-${PayMethod[method]}`;
+  onChoose(item: ViewPayItem) {
+    this.now = item.banlanceOk && item || this.now;
   }
 
   onDismiss() {
@@ -142,7 +141,8 @@ export class PayMobileComponent implements OnInit, OnDestroy {
       this.hasServerError = false;
       this.paying = true;
       let pay: Observable<Response>;
-      switch (this.method) {
+      const method = this.now.method;
+      switch (method) {
         case PayMethod.wepay:
           pay = this.wxService.payInMobile(this.order.id);
           break;
@@ -155,11 +155,18 @@ export class PayMobileComponent implements OnInit, OnDestroy {
         default:
           throw new Error('Pay on unexpected type.');
       }
-      pay.catch(err => this.formatError(err)).subscribe(
+      pay.do(_ => this.user.last = method).catch(err => this.formatError(err)).subscribe(
         res => this.payOk(res),
         errs => this.payFailed(errs),
       );
     }
+  }
+
+  private defaultMethod(): ViewPayItem {
+    let view: ViewPayItem;
+    [this.user.last || this.config.recommend || defaultPaySequence[0], ...defaultPaySequence]
+      .findIndex(method => ~this.items.findIndex(item => (view = item).method === method) as any);
+    return view;
   }
 
   private formatError(err: Response | any) {
