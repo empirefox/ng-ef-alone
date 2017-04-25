@@ -11,7 +11,7 @@ export class PayConfig {
 }
 
 export interface IWxPayConfig {
-  postPayInWxUrl: string;
+  postPayInWechatUrl: string;
   postPayInH5Url: string;
   postPayWithQrUrl: string;
   postAfterPayUrl: string;

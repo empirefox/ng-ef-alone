@@ -1,0 +1,6 @@
+{
+  "required": "${name} is required",
+  "nodefine": "${name} is not defined",
+  "failed": "${name} with value: ${value}, validator: ${validator} failed",
+  "typefailed": "${name} with validato: ${validator}, gotype: ${gotype} failed"
+}

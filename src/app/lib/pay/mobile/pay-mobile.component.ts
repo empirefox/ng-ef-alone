@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
+import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { Response } from '@angular/http';
 import { FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
@@ -20,6 +20,7 @@ import { PayService, WxService } from '../services';
 interface ViewPayItem {
   method: PayMethod;
   config: PayMethodConfig;
+  color: string;
   tr: PayMethodTranslate;
   efSymbol: string;
   amount: string | number;
@@ -60,6 +61,7 @@ export class PayMobileComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
   constructor(
+    private currencyPipe: CurrencyPipe,
     private decimalPipe: DecimalPipe,
     private serverErrorFormatService: ServerErrorFormatService,
     private xlangJsonService: XlangJsonService,
@@ -82,27 +84,31 @@ export class PayMobileComponent implements OnInit, OnDestroy {
         if (method && accepted) {
           const config = payMethodConfigs[method];
           const tr: PayMethodTranslate = tplTr[m];
+          const { cc, unit } = tr;
 
-          const decimal = payMethodConfigs[this.now.method].decimal;
-          const amount = this.order.amount;
+          const { decimal, color, paykey, divide = 1 } = config;
+          const amount = this.order.amount / divide;
 
           let banlance: string;
           if (config.banlance) {
             const { all = '', failed = '' } = config.banlance && tr.banlance || {};
-            const bn: number = this.user[m] || 0;
-            const bv = decimal ? this.decimalPipe.transform(bn, decimal) : bn;
-            banlance = `${all}${bv}${tr.unit}${failed}`;
+            const bn: number = (this.user[m] || 0) / divide;
+            const bv = cc ? this.currencyPipe.transform(bn, cc, true, decimal) :
+              `${(decimal ? this.decimalPipe.transform(bn, decimal) : bn)} ${unit}`;
+            banlance = `${all}${bv}${failed}`;
           }
 
           const banlanceOk = !config.banlance || this.user[m] >= amount;
           return {
             method, config, tr,
+            color: color,
             efSymbol: `ef-pay#ef-pay-${m}`,
-            amount: decimal ? this.decimalPipe.transform(amount, decimal) : amount,
+            amount: cc ? this.currencyPipe.transform(amount, cc, false, decimal) :
+              `${(decimal ? this.decimalPipe.transform(amount, decimal) : amount)} ${unit}`,
             banlance,
             banlanceOk,
-            showPaykey: config.paykey && this.user.hasPayKey,
-            gotoPaykeyLabel: config.paykey && !this.user.hasPayKey && tplTr.paykeyLabel,
+            showPaykey: paykey && this.user.hasPayKey,
+            gotoPaykeyLabel: paykey && !this.user.hasPayKey && tplTr.gotoPaykeyLabel,
             valid: accepted && banlanceOk,
           };
         }
@@ -122,6 +128,10 @@ export class PayMobileComponent implements OnInit, OnDestroy {
       active: this.now === item,
       disabled: !item.banlanceOk,
     };
+  }
+
+  checkBtnColor(item: ViewPayItem) {
+    return this.now === item ? 'warn' : null;
   }
 
   onChoose(item: ViewPayItem) {
@@ -156,7 +166,7 @@ export class PayMobileComponent implements OnInit, OnDestroy {
           throw new Error('Pay on unexpected type.');
       }
       pay.do(_ => this.user.last = method).catch(err => this.formatError(err)).subscribe(
-        res => this.payOk(res),
+        (res: any) => this.payOk(res),
         errs => this.payFailed(errs),
       );
     }
@@ -171,8 +181,7 @@ export class PayMobileComponent implements OnInit, OnDestroy {
 
   private formatError(err: Response | any) {
     return this.xlangJsonService.load(this.config.formXjsonId)
-      .mergeMap(formTpl => Observable.throw(this.serverErrorFormatService.format(err, formTpl)))
-      .take(1);
+      .mergeMap(formTpl => this.serverErrorFormatService.throw(err, formTpl));
   }
 
   private payOk(res: Response) {

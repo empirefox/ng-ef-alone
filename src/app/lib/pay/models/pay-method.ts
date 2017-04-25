@@ -3,6 +3,7 @@ import { ua } from '../../common';
 export interface PayMethodConfig {
   color: string;
   decimal?: string;
+  divide?: number;
   banlance?: boolean;
   paykey?: boolean;
 }
@@ -33,14 +34,17 @@ export const payMethodConfigs: { [index: number]: PayMethodConfig } = {
   [PayMethod.wepay]: {
     color: '#3CAF36',
     decimal: '1.2-2',
+    divide: 100,
   },
   [PayMethod.alipay]: {
     color: '#009FE8',
     decimal: '1.2-2',
+    divide: 100,
   },
   [PayMethod.cash]: {
     color: '#f44336',
     decimal: '1.2-2',
+    divide: 100,
     banlance: true,
     paykey: true,
   },
@@ -52,6 +56,7 @@ export const payMethodConfigs: { [index: number]: PayMethodConfig } = {
 
 export interface PayMethodTranslate {
   name: string;
+  cc?: string;
   unit: string;
   banlance?: { all: string; failed: string; };
 }

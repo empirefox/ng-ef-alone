@@ -8,8 +8,13 @@
   color: rgba(0, 0, 0, 0.54);
 }
 
+.flex-row {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+
 .flex-basic {
-  padding: 0;
 
   .mat-card-content {
     padding: 0;
@@ -29,6 +34,20 @@
           display: none;
         }
       }
+
+      .mat-list-item .mat-list-icon {
+        width: 48px;
+        height: 24px;
+      }
+    }
+
+    .mat-input-container {
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .mat-card-actions {
+      margin: 0;
     }
 
   }
@@ -41,7 +60,18 @@
 
 .current, .active {
   margin: -1px;
-  border: 1px solid rgb(250,0,255);
+  border: 1px solid #23ace0;
+}
+
+.current {
+  padding: 5px;
+  .mat-icon {
+    margin: 0 10px 0 16px;
+  }
+  .name {
+    position: absolute;
+    font-size: 22px;
+  }
 }
 
 .hide {

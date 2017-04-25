@@ -51,7 +51,7 @@ export class WxService {
   payInWx(orderId: number): Observable<Response> {
     const data: IWxPayPayload = { OrderID: orderId };
     const payload = JSON.stringify(data);
-    return this.http.post(this.config.postPayInWxUrl, payload).
+    return this.http.post(this.config.postPayInWechatUrl, payload).
       mergeMap(res => this.requestPayInWx(<IWxPayArgs>res.json())).
       mergeMap(_ => this.http.post(this.config.postAfterPayUrl, payload));
   }

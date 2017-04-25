@@ -1,4 +1,4 @@
-import { Http, Request, RequestOptionsArgs, Response, URLSearchParams } from '@angular/http';
+import { Http, Request, RequestOptionsArgs, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
 export interface IHttp {
@@ -38,15 +38,3 @@ export interface IHttp {
    */
   options(url: string, options?: RequestOptionsArgs): Observable<Response>;
 }
-
-export function toURLSearchParams(obj): URLSearchParams {
-  const params = new URLSearchParams();
-  for (let key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      params.set(key, obj[key]);
-    }
-  }
-  return params;
-}
-
-export const isHttps = window.location.protocol === 'https:';

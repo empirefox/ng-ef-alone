@@ -1,16 +1,21 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { ErrorConfig, RemoteErrorHandler, RemoteErrorService, ServerErrorFormatService, FieldErrorsComponent } from './errors';
+import { XlangModule } from '../xlang';
+
+import { ErrorConfig, ServerErrorFormatService } from './core';
+import { FieldErrorsComponent } from './field-errors/field-errors.component';
 
 @NgModule({
   imports: [
     CommonModule,
+    XlangModule,
   ],
   declarations: [
     FieldErrorsComponent,
   ],
   exports: [
+    XlangModule,
     FieldErrorsComponent,
   ]
 })
@@ -19,7 +24,6 @@ export class ErrorModule {
     return {
       ngModule: ErrorModule,
       providers: [
-        RemoteErrorService,
         ServerErrorFormatService,
         { provide: ErrorConfig, useValue: config },
       ],

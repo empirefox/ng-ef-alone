@@ -1,25 +1,27 @@
 // https://github.com/jonathantneal/svg4everybody
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { DOCUMENT } from '@angular/platform-browser';
 import { Observable } from 'rxjs/Observable';
 
-import { RemoteErrorService } from '../error';
+import { RemoteErrorService } from '../reporter';
 import { SVG4E_BUNDLES } from './token';
-import { Svg4eBundle, ISvg4eSymbol } from './svg4e.types';
+import { Svg4eBundle, SVG4E_BUNDLE, ISvg4eSymbol } from './svg4e.types';
 
 @Injectable()
 export class Svg4eService {
   private caches = new Map<string, Observable<Map<string, ISvg4eSymbol>>>();
   private merged: Observable<Map<string, ISvg4eSymbol>>;
   private bundlesByName = new Map<string, Svg4eBundle>();
+  private document: Document;
 
   constructor(
-    @Inject(DOCUMENT) private document: HTMLDocument,
+    @Inject(DOCUMENT) document: any,
     private http: Http,
     private remoteErrorService: RemoteErrorService,
-    @Inject(SVG4E_BUNDLES) private bundles1: Svg4eBundle[],
-    @Inject(Svg4eBundle) private bundles2: Svg4eBundle[]) {
+    @Optional() @Inject(SVG4E_BUNDLES) private bundles1: Svg4eBundle[],
+    @Optional() @Inject(SVG4E_BUNDLE) private bundles2: Svg4eBundle[]) {
+    this.document = document;
     this.init();
   }
 
@@ -47,7 +49,7 @@ export class Svg4eService {
         const symbols: HTMLElement[] = Array.apply(null, cachedDocument.querySelectorAll('symbol,svg'));
         symbols.forEach(symbol => {
           if (symbol.id) {
-            const fragment = document.createDocumentFragment();
+            const fragment = this.document.createDocumentFragment();
             const viewBox = symbol.getAttribute('viewBox');
 
             const clone = symbol.cloneNode(true);

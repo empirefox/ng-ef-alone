@@ -1,6 +1,6 @@
 <md-sidenav-container fullscreen>
-  <md-sidenav mode="over" opened="false" align="start">
-    <ef-pay></ef-pay>
+  <md-sidenav mode="over" opened="true" align="start">
+    <ef-pay-mobile [user]="user" [order]="order" [enable]="enable" (close)="onClose()" (setPaykey)="onSetPaykey($event)" (paid)="onPaid($event)"></ef-pay-mobile>
   </md-sidenav>
   <h1>
     {{title}}

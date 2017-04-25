@@ -1,0 +1,41 @@
+{
+  "failed": "Pay failed, please try again later!",
+  "amountTip": "Total amount",
+  "selected": "Pay with",
+  "available": "Choose a pay method",
+  "paykeyLabel": "Please input pay key",
+  "gotoPaykeyLabel": "Set pay key",
+  "methods": [
+    "alipay",
+    "wepay",
+    "cash",
+    "points"
+  ],
+  "cash": {
+    "cc": "USD",
+    "unit": "dollor",
+    "name": "Cash",
+    "balance": {
+      "all": "Avilible cash ",
+      "failed": "(Not enough)"
+    }
+  },
+  "points": {
+    "unit": "points",
+    "name": "Points",
+    "balance": {
+      "all": "Avilible points ",
+      "failed": "(Not enough)"
+    }
+  },
+  "wepay": {
+    "cc": "USD",
+    "unit": "dollor",
+    "name": "Wepay"
+  },
+  "alipay": {
+    "cc": "USD",
+    "unit": "dollor",
+    "name": "Alipay"
+  }
+}

@@ -1,15 +1,15 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { HttpModule } from '@angular/http';
 
-import { ErrorModule } from '../error';
+import { ReporterModule } from '../reporter';
 import { DEFAULT_XLANG, XLANG_JSON_CONFIGS } from './token';
 import { XlangService } from './xlang.service';
 import { XlangJsonConfig } from './xlang-json.config';
 import { XlangJsonService } from './xlang-json.service';
 
 @NgModule({
-  imports: [HttpModule, ErrorModule],
-  exports: [HttpModule, ErrorModule],
+  imports: [HttpModule, ReporterModule],
+  exports: [HttpModule, ReporterModule],
 })
 export class XlangModule {
 

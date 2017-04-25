@@ -1,0 +1,9 @@
+{
+  "src": [
+    "./src/app/demo/core/user/user.ts",
+    "./src/app/demo/core/order/order.ts"
+  ],
+  "dist": "./src/app/demo/core/api/trans.ts",
+  "tag": "tr",
+  "lang": "zh"
+}

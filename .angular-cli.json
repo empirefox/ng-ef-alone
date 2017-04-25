@@ -14,6 +14,26 @@
           "glob": "bytesize-symbols.min.svg",
           "input": "../node_modules/bytesize-icons/dist/",
           "output": "./svg4e/"
+        },
+        {
+          "glob": "**/*",
+          "input": "./app/demo/core/api/go-consts/xlang/",
+          "output": "./i18n/"
+        },
+        {
+          "glob": "**/*",
+          "input": "./app/lib/pay/assets/",
+          "output": "./assets/ef-pay/"
+        },
+        {
+          "glob": "xlang-*.json",
+          "input": "./app/lib/error/errors/govalidator.v4",
+          "output": "./i18n/govalidator.v4/"
+        },
+        {
+          "glob": "xlang-*.json",
+          "input": "./app/lib/error/errors/validator.v9",
+          "output": "./i18n/validator.v9/"
         }
       ],
       "index": "index.html",

@@ -3,7 +3,7 @@ import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import template from 'lodash-es/template';
 
-import { RemoteErrorService } from '../error';
+import { RemoteErrorService } from '../reporter';
 import { XLANG_JSON_CONFIGS } from './token';
 import { XlangJsonConfig } from './xlang-json.config';
 import { XlangService } from './xlang.service';
@@ -47,19 +47,28 @@ export class XlangJsonLoader {
   }
 
   load(): Observable<any> {
-    return this.xlangService.lang$.mergeMap(lang => {
-      if (!this.jsons.has(lang)) {
-        if (!~this.config.langs.indexOf(lang)) {
-          lang = this.xlangService.langPart(lang);
-        }
-        if (!~this.config.langs.indexOf(lang)) {
-          lang = this.xlangService.defaultLang || this.config.langs[0];
-        }
+    return this.xlangService.lang$.mergeMap(lang0 => {
+      if (!this.jsons.has(lang0)) {
+        const lang = this.findLand([lang0, this.xlangService.defaultLang], this.config.langs);
         const json = this.http.get(this.url({ lang })).map(res => res.json()).catch(this.report).publishReplay(1).refCount();
         this.jsons.set(lang, json);
+        this.jsons.set(lang0, json);
       }
-      return this.jsons.get(lang);
+      return this.jsons.get(lang0);
     });
+  }
+
+  findLand(langs: string[], all: string[]): string {
+    for (let lang of langs) {
+      if (~all.indexOf(lang)) {
+        return lang;
+      }
+      lang = this.xlangService.langPart(lang);
+      if (~all.indexOf(lang)) {
+        return lang;
+      }
+    }
+    return all[0];
   }
 
 }
