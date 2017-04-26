@@ -42,7 +42,6 @@ export class PayMobileComponent implements OnInit, OnDestroy {
   @Input() order: PayOrder;
   @Input() enable: PayMethod;
 
-  @Output() close = new EventEmitter<any>();
   @Output() setPaykey = new EventEmitter<PayOrder>();
   @Output() paid = new EventEmitter<Response>();
 
@@ -138,10 +137,6 @@ export class PayMobileComponent implements OnInit, OnDestroy {
     this.now = item.banlanceOk && item || this.now;
   }
 
-  onDismiss() {
-    this.close.next();
-  }
-
   gotoSetPayKey() {
     this.setPaykey.next(this.order);
   }
@@ -165,7 +160,9 @@ export class PayMobileComponent implements OnInit, OnDestroy {
         default:
           throw new Error('Pay on unexpected type.');
       }
-      pay.do(_ => this.user.last = method).catch(err => this.formatError(err)).subscribe(
+      pay.do(_ => this.user.last = method)
+        .catch(err => this.serverErrorFormatService.throw(err, this.config.formXjsonId))
+        .subscribe(
         (res: any) => this.payOk(res),
         errs => this.payFailed(errs),
       );
@@ -177,11 +174,6 @@ export class PayMobileComponent implements OnInit, OnDestroy {
     [this.user.last || this.config.recommend || defaultPaySequence[0], ...defaultPaySequence]
       .findIndex(method => ~this.items.findIndex(item => (view = item).method === method) as any);
     return view;
-  }
-
-  private formatError(err: Response | any) {
-    return this.xlangJsonService.load(this.config.formXjsonId)
-      .mergeMap(formTpl => this.serverErrorFormatService.throw(err, formTpl));
   }
 
   private payOk(res: Response) {

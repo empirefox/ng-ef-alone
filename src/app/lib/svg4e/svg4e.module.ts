@@ -1,4 +1,4 @@
-import { Inject, NgModule, Optional, OpaqueToken, ModuleWithProviders } from '@angular/core';
+import { Inject, NgModule, Optional, InjectionToken, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
 
@@ -8,7 +8,7 @@ import { Svg4eBundle, SVG4E_BUNDLE } from './svg4e.types';
 import { Svg4eService } from './svg4e.service';
 import { Svg4eDirective } from './svg4e.directive';
 
-export const SVG4E_DEP = new OpaqueToken('Svg4eDep');
+export const SVG4E_DEP = new InjectionToken<string>('Svg4eDep');
 
 @NgModule({
   imports: [CommonModule, HttpModule, ReporterModule],

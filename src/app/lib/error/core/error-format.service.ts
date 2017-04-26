@@ -39,12 +39,12 @@ export class ServerErrorFormatService {
     });
   }
 
-  throw(error: Response | FieldsErrors | any, fieldXlangId: string): Observable<FieldsErrors> {
+  throw(error: Response | FieldsErrors | any, fieldXlangId: any): Observable<FieldsErrors> {
     return this.format(error, fieldXlangId).mergeMap(err => Observable.throw(err));
   }
 
   // StatusBadRequest or StatusPreconditionFailed?
-  format(error: Response | FieldsErrors | any, fieldXlangId: string): Observable<FieldsErrors> {
+  format(error: Response | FieldsErrors | any, fieldXlangId: any): Observable<FieldsErrors> {
     if (error instanceof FieldsErrors) {
       return Observable.of(error);
     }

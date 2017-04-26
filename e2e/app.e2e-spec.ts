@@ -1,6 +1,6 @@
 import { NgEfAlonePage } from './app.po';
 
-describe('ng-ef-alone App', () => {
+describe('ng-ef-sand App', () => {
   let page: NgEfAlonePage;
 
   beforeEach(() => {

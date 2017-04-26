@@ -19,12 +19,7 @@ export class AppComponent {
     cash: 10000,
     points: 500000,
   };
-  order: PayOrder = {
-    id: 100,
-    desc: 'phone',
-    amount: 10000,
-    accept: PayMethod.ALL,
-  };
+  order: PayOrder;
   enable = PayMethod.WEPAY_CASH;
 
   private sub: any;
@@ -32,7 +27,11 @@ export class AppComponent {
   constructor(private payService: PayService) { }
 
   ngOnInit() {
-    this.payService.pay$.subscribe(_ => this.paySidenav.open());
+    this.payService.pay$.subscribe(order => {
+      // TODO validate order
+      this.order = order;
+      this.paySidenav.open();
+    });
   }
 
   ngOnDestroy() {

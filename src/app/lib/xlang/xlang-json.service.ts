@@ -20,7 +20,7 @@ export class XlangJsonService {
     configs.forEach(config => this.loaders.set(config.id, new XlangJsonLoader(http, xlangService, config, this.report.bind(this))));
   }
 
-  load(id: string): Observable<any> {
+  load(id: any): Observable<any> {
     if (!this.loaders.has(id)) {
       throw new Error(`XlangJsonLoader for "${id}" not found`);
     }

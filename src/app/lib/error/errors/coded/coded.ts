@@ -15,7 +15,7 @@ import { CodedErrorTranslator } from './translator';
 export class CodedError implements ServerError {
   private result: Dict<FormattedFieldErrors>;
 
-  static forRoot(parserKey: any, codesXlangId: string, config?: ICodedErrorConfig): ErrorParser {
+  static forRoot(parserKey: any, codesXlangId: any, config?: ICodedErrorConfig): ErrorParser {
     return {
       parser: parserKey,
       type: CodedError,

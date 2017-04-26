@@ -43,7 +43,7 @@ export interface ErrorParser {
   parser: any;
   type: ServerErrorConstructor;
   translator: any;
-  xlang: Dict<string>; // will be injected to translator
+  xlang: Dict<any>; // will be injected to translator
   config?: any;
 
   _xlang?: Observable<Dict<Object>>;

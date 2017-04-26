@@ -17,7 +17,7 @@ export class GovalidatorErrorV4 implements ServerError {
 
   private result: Dict<FormattedFieldErrors>;
 
-  static forRoot(parserKey: any, validatorsXlangId: string): ErrorParser {
+  static forRoot(parserKey: any, validatorsXlangId: any): ErrorParser {
     return {
       parser: parserKey,
       type: GovalidatorErrorV4,

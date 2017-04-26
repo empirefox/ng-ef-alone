@@ -16,7 +16,7 @@ import { ValidatorErrorTranslatorV9 } from './translator';
 export class ValidatorErrorV9 implements ServerError {
   private result: Dict<FormattedFieldErrors>;
 
-  static forRoot(parserKey: any, tagsXlangId: string, config?: ValidatorConfigV9): ErrorParser {
+  static forRoot(parserKey: any, tagsXlangId: any, config?: ValidatorConfigV9): ErrorParser {
     return {
       parser: parserKey,
       type: ValidatorErrorV9,

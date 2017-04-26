@@ -1,7 +1,7 @@
-import { Inject, Injectable, OpaqueToken, Optional } from '@angular/core';
+import { Inject, Injectable, InjectionToken, Optional } from '@angular/core';
 import { IHttp } from './http';
 
-export const AUTH_HTTP = new OpaqueToken('AuthHttp');
+export const AUTH_HTTP = new InjectionToken<IHttp>('AuthHttp');
 
 @Injectable()
 export class AuthHttpService {

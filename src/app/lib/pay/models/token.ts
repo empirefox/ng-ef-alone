@@ -1,3 +1,5 @@
-import { OpaqueToken } from '@angular/core';
+import { InjectionToken } from '@angular/core';
 
-export const PAY_HTTP = new OpaqueToken('PayHttp');
+import { IHttp } from '../../common';
+
+export const PAY_HTTP = new InjectionToken<IHttp>('PayHttp');

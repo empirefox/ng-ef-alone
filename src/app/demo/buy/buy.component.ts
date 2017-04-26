@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+import { PayOrder, PayMethod } from '../../lib/pay';
 import { PayService } from '../pay/pay.service';
 
 @Component({
@@ -9,13 +10,20 @@ import { PayService } from '../pay/pay.service';
 })
 export class BuyComponent implements OnInit {
 
+  order: PayOrder = {
+    id: 100,
+    desc: 'phone',
+    amount: 10000,
+    accept: PayMethod.ALL,
+  };
+
   constructor(private payService: PayService) { }
 
   ngOnInit() {
   }
 
   onPay() {
-    this.payService.pay$.next();
+    this.payService.pay$.next(this.order);
   }
 
 }

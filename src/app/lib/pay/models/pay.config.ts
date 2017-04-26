@@ -2,8 +2,8 @@ import { PayMethod } from './pay-method';
 
 export class PayConfig {
   recommend?: PayMethod;
-  tplXjsonId: string;
-  formXjsonId: string;
+  tplXjsonId: any;
+  formXjsonId: any;
   paykeyPattern: string;
   postPayCashUrl: string;
   postPayPointsUrl: string;

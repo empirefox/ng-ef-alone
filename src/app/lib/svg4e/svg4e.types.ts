@@ -1,6 +1,6 @@
-import { OpaqueToken } from '@angular/core';
+import { InjectionToken } from '@angular/core';
 
-export const SVG4E_BUNDLE = new OpaqueToken('Svg4eBundle');
+export const SVG4E_BUNDLE = new InjectionToken<Svg4eBundle>('Svg4eBundle');
 
 export interface Svg4eBundle {
   name: string;

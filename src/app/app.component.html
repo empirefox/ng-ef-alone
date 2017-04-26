@@ -1,6 +1,11 @@
 <md-sidenav-container fullscreen>
   <md-sidenav mode="over" opened="true" align="start">
-    <ef-pay-mobile [user]="user" [order]="order" [enable]="enable" (close)="onClose()" (setPaykey)="onSetPaykey($event)" (paid)="onPaid($event)"></ef-pay-mobile>
+    <md-toolbar>
+      <span class="flex-spacer"></span>
+      <button md-icon-button color="warn" (click)="onClose()"><md-icon>close</md-icon></button>
+    </md-toolbar>
+    <ef-pay-mobile *ngIf="user&&order" [user]="user" [order]="order" [enable]="enable" (setPaykey)="onSetPaykey($event)"
+      (paid)="onPaid($event)"></ef-pay-mobile>
   </md-sidenav>
   <h1>
     {{title}}

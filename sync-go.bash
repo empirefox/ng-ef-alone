@@ -3,7 +3,7 @@
 gen-ts-trans
 gen-go-const-ts
 gen-go-tag-apis -o src/app/demo/core/api/api.ts -i ${GOPATH}/src/github.com/empirefox/bongine/api/api.go
-sed -i "s|ng-ef-alone/xlang|../../../../../lib/xlang|g" ./src/app/demo/core/api/go-consts/pipe/*.ts
+sed -i "s|ng-ef-sand/xlang|../../../../../lib/xlang|g" ./src/app/demo/core/api/go-consts/pipe/*.ts
 
 # @swimlane/ngx-datatable angular2-json-schema-form angular-tree-component file:../bongin-base countdown \
 # feathers feathers-memory feathers-reactive ng-lazyload-image ng2-ef-widgets ngx-rating \

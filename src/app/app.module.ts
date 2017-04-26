@@ -15,7 +15,10 @@ import {
   MdToolbarModule,
 } from '@angular/material';
 
-import { ErrorsParser, api, DemoModule } from './demo';
+import {
+  ErrorsParser, api, DemoModule,
+  xlangCodesId, xlangValidatorId, xlangGovalidatorId, xlangPayTplId, xlangPayFormId,
+} from './demo';
 
 import { AUTH_HTTP } from './lib/common';
 import { ReporterModule } from './lib/reporter';
@@ -29,27 +32,27 @@ import { AppComponent } from './app.component';
 
 export const xlangConfigs: XlangJsonConfig[] = [
   {
-    id: 'codes',
+    id: xlangCodesId,
     langs: ['en', 'zh'],
     urlTemplate: '/i18n/CodedError/${lang}.json',
   },
   {
-    id: 'validator.v9',
+    id: xlangValidatorId,
     langs: ['en'],
     urlTemplate: '/i18n/validator.v9/xlang-${lang}.json',
   },
   {
-    id: 'govalidator.v4',
+    id: xlangGovalidatorId,
     langs: ['en'],
-    urlTemplate: '/i18n/govalidator.v4/xlang-${lang}.json',
+    urlTemplate: '/i18n/xlang-govalidator.v4/xlang-${lang}.json',
   },
   {
-    id: 'ef-pay-tpl',
+    id: xlangPayTplId,
     langs: ['en'],
     urlTemplate: '/assets/ef-pay/tpl-${lang}.json',
   },
   {
-    id: 'ef-pay-form',
+    id: xlangPayFormId,
     langs: ['en'],
     urlTemplate: '/assets/ef-pay/form-${lang}.json',
   },
@@ -57,9 +60,9 @@ export const xlangConfigs: XlangJsonConfig[] = [
 
 export const errorConfig: ErrorConfig = {
   parsers: [
-    CodedError.forRoot(ErrorsParser.ParseCode, 'codes', { postCode: [500] }),
-    ValidatorErrorV9.forRoot(ErrorsParser.ParseGinValidator, 'validator.v9'),
-    GovalidatorErrorV4.forRoot(ErrorsParser.ParseGovalidator, 'govalidator.v4'),
+    CodedError.forRoot(ErrorsParser.ParseCode, xlangCodesId, { postCode: [500] }),
+    ValidatorErrorV9.forRoot(ErrorsParser.ParseGinValidator, xlangValidatorId),
+    GovalidatorErrorV4.forRoot(ErrorsParser.ParseGovalidator, xlangGovalidatorId),
   ],
   postUnparsed: true,
 };
@@ -75,8 +78,8 @@ export const svg4eBundles: Svg4eBundle[] = [
 export function payConfigFactory() {
   return {
     recommend: PayMethod.wepay,
-    tplXjsonId: 'ef-pay-tpl',
-    formXjsonId: 'ef-pay-form',
+    tplXjsonId: xlangPayTplId,
+    formXjsonId: xlangPayFormId,
     paykeyPattern: `\\d{6}`,
     postPayCashUrl: api.PostPayCash,
     postPayPointsUrl: api.PostPayPoints,
