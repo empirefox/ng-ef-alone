@@ -1,10 +1,10 @@
-import { NgEfAlonePage } from './app.po';
+import { NgEfSandPage } from './app.po';
 
 describe('ng-ef-sand App', () => {
-  let page: NgEfAlonePage;
+  let page: NgEfSandPage;
 
   beforeEach(() => {
-    page = new NgEfAlonePage();
+    page = new NgEfSandPage();
   });
 
   it('should display message saying app works', () => {

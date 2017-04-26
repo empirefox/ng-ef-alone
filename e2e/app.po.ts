@@ -1,6 +1,6 @@
 import { browser, element, by } from 'protractor';
 
-export class NgEfAlonePage {
+export class NgEfSandPage {
   navigateTo() {
     return browser.get('/');
   }
