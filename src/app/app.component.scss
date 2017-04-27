@@ -15,6 +15,7 @@ body {
 
       .active {
         color: #03904c;
+        background: rgba(0,0,0,.04);
       }
 
       .mat-button {
@@ -32,6 +33,6 @@ body {
 
 }
 
-.mat-sidenav-container .pay .mat-sidenav {
+.mat-sidenav-container .pay.mat-sidenav {
   width: 100%;
 }

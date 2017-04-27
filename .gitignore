@@ -43,3 +43,6 @@ Thumbs.db
 
 # go-consts
 /src/app/demo/core/api/
+
+# qiniu
+/.qshell

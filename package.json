@@ -6,9 +6,13 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build2qiniu": "ng build && npm run replace && npm run qiniu",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "replace-domain": "node ./tools/replace-domain `qshell -m domains sand`",
+    "replace": "npm run replace-domain",
+    "qiniu": "qshell -m qupload ./.qshell/account.json"
   },
   "private": true,
   "dependencies": {
@@ -56,6 +60,8 @@
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.1.0",
+    "qshell-cli": "^2.0.5",
+    "replace-in-file": "^2.5.0",
     "rxjs": "^5.1.0",
     "show-js-error": "^1.8.1",
     "ts-node": "~2.0.0",
