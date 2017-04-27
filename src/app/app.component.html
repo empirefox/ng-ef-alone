@@ -1,14 +1,21 @@
 <md-sidenav-container fullscreen>
-  <md-sidenav mode="over" opened="true" align="start">
+  <md-sidenav class="pay" mode="over" opened="false" align="start">
     <md-toolbar>
       <span class="flex-spacer"></span>
       <button md-icon-button color="warn" (click)="onClose()"><md-icon>close</md-icon></button>
     </md-toolbar>
-    <ef-pay-mobile *ngIf="user&&order" [user]="user" [order]="order" [enable]="enable" (setPaykey)="onSetPaykey($event)"
-      (paid)="onPaid($event)"></ef-pay-mobile>
+    <ef-pay *ngIf="user&&order" [user]="user" [order]="order" [enable]="enable" (setPaykey)="onSetPaykey($event)" (paid)="onPaid($event)"></ef-pay>
   </md-sidenav>
-  <h1>
-    {{title}}
-  </h1>
-  <router-outlet></router-outlet>
+
+  <md-sidenav-container class="demo-root" fullscreen>
+    <md-sidenav mode="side" opened="true" align="start">
+      <md-nav-list>
+        <a *ngFor="let navItem of navItems" md-list-item color="primary" [routerLink]="['/'+navItem]" routerLinkActive="active">{{navItem}}</a>
+      </md-nav-list>
+    </md-sidenav>
+    <div class="demo-main">
+      <router-outlet></router-outlet>
+    </div>
+  </md-sidenav-container>
+
 </md-sidenav-container>

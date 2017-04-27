@@ -1,0 +1,19 @@
+<button md-raised-button (click)="codedError()">CodedError</button>
+<button md-raised-button (click)="codedErrorReport()">CodedError(report)</button>
+<button md-raised-button (click)="validatorErrorV9()">ValidatorErrorV9</button>
+<button md-raised-button (click)="govalidatorErrorV4()">GovalidatorErrorV4</button>
+<button md-raised-button (click)="govalidatorErrorV4String()">GovalidatorErrorV4(string)</button>
+<button md-raised-button (click)="httpFailed()">Http Failed</button>
+<button md-raised-button (click)="unparsed()">Unparsed</button>
+
+<button md-raised-button (click)="toggleCustomStyles()">Toggle custom styles</button> formating: {{formating}}
+
+<div *ngIf="errors" class="server-errors">
+  {{errors.array|json}}
+</div>
+
+<div *ngIf="errors" class="server-errors">
+  <ef-field-errors *ngFor="let error of errors.array" [field]="error" [styles]="errorStyles"></ef-field-errors>
+</div>
+
+<div *ngIf="innerErr">{{innerErr|json}}</div>

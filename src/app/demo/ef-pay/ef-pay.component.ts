@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 
 import { PayOrder, PayMethod } from '../../lib/pay';
-import { PayService } from '../pay/pay.service';
+import { PayService } from '../services/pay.service';
 
 @Component({
-  selector: 'app-buy',
-  templateUrl: './buy.component.html',
-  styleUrls: ['./buy.component.css']
+  selector: 'app-ef-pay',
+  templateUrl: './ef-pay.component.html',
+  styleUrls: ['./ef-pay.component.css']
 })
-export class BuyComponent implements OnInit {
+export class EfPayComponent implements OnInit {
 
   order: PayOrder = {
     id: 100,

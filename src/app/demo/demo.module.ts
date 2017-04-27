@@ -1,26 +1,33 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MdButtonModule } from '@angular/material';
 
-import { PayModule } from '../lib/pay';
+import { EfHomeModule } from './ef-home/ef-home.module';
+import { EfReporterModule } from './ef-reporter/ef-reporter.module';
+import { EfXlangModule } from './ef-xlang/ef-xlang.module';
+import { EfSvg4eModule } from './ef-svg4e/ef-svg4e.module';
+import { EfErrorModule } from './ef-error/ef-error.module';
+import { EfPayModule } from './ef-pay/ef-pay.module';
 
-import { DemoRoutingModule } from './demo-routing.module';
-import { BuyComponent } from './buy/buy.component';
-
-import { PayService } from './pay/pay.service';
+import { PayService } from './services/pay.service';
 
 @NgModule({
   imports: [
     CommonModule,
-    MdButtonModule,
-    DemoRoutingModule,
-    PayModule,
+
+    EfHomeModule,
+    EfReporterModule,
+    EfXlangModule,
+    EfSvg4eModule,
+    EfErrorModule,
+    EfPayModule,
   ],
-  declarations: [BuyComponent],
   exports: [
-    MdButtonModule,
-    PayModule,
-    BuyComponent,
+    EfHomeModule,
+    EfReporterModule,
+    EfXlangModule,
+    EfSvg4eModule,
+    EfErrorModule,
+    EfPayModule,
   ]
 })
 export class DemoModule {

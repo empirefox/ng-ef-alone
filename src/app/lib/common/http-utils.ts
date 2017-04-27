@@ -1,4 +1,4 @@
-import { URLSearchParams } from '@angular/http';
+import { Response, URLSearchParams } from '@angular/http';
 
 export function toURLSearchParams(obj): URLSearchParams {
   const params = new URLSearchParams();
@@ -8,6 +8,23 @@ export function toURLSearchParams(obj): URLSearchParams {
     }
   }
   return params;
+}
+
+export function responseToError(error: any): Error {
+  let errMsg: string;
+  if (error instanceof Response) {
+    let err;
+    try {
+      const body = error.json() || '';
+      err = body.error || JSON.stringify(body);
+    } catch (_) {
+      err = error.text();
+    }
+    errMsg = `${error.status || 'ERR_CONNECTION_REFUSED'} - ${error.statusText || ''} ${err}`;
+  } else {
+    errMsg = error.message ? error.message : error.toString();
+  }
+  return new Error(errMsg);
 }
 
 export const isHttps = window.location.protocol === 'https:';

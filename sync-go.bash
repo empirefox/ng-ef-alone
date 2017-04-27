@@ -10,3 +10,6 @@ sed -i "s|ng-ef-sand/xlang|../../../../../lib/xlang|g" ./src/app/demo/core/api/g
 # qrcanvas simple-line-icons spark-md5 sort-keys timeago.js
 
 # @types/countdown @types/swiper
+
+# demo:
+# module=error ng g module ./demo/ef-$module --routing && ng g component ./demo/ef-$module/ --spec=false

@@ -59,7 +59,7 @@ export class Svg4eDirective implements OnChanges {
   }
 
   private setHref(href: string, svg4eBundle?: Svg4eBundle) {
-    this.element.nativeElement.innerHTML = `<use xlink:href="${href}"/>`;
+    this.element.nativeElement.innerHTML = `<use href="${href}"/>`;
     this.viewBox = this._viewBox;
     this.addClass(svg4eBundle);
   }

@@ -11,3 +11,8 @@ export class RemoteNgErrorHandler implements ErrorHandler {
     this.remoteErrorService.error(err);
   }
 }
+
+export const REMOTE_NG_ERROR_HANDLER = {
+  provide: ErrorHandler,
+  useClass: RemoteNgErrorHandler,
+};

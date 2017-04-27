@@ -49,7 +49,7 @@ export class CodedError implements ServerError {
 
   private compute(fieldError: IParseError) {
     const codes = this.config.postCode;
-    if (codes && (~codes.findIndex(code => code === fieldError.Code))) {
+    if (codes && codes.includes(fieldError.Code)) {
       this.remoteErrorService.error(new Error(JSON.stringify(fieldError)));
     }
 

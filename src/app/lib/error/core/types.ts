@@ -46,7 +46,8 @@ export interface ErrorParser {
   xlang: Dict<any>; // will be injected to translator
   config?: any;
 
-  _xlang?: Observable<Dict<Object>>;
+  _translatorsByLang?: Map<string, any>;
+  _translatorsLoadingByLang?: Map<string, Observable<any>>;
 }
 
 // config

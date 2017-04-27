@@ -35,9 +35,16 @@
         }
       }
 
-      .mat-list-item .mat-list-icon {
-        width: 48px;
-        height: 24px;
+      .mat-list-item {
+        padding: 1px; /* replaced by border when active */
+        &.active {
+          padding: 0;
+          border: 1px solid #23ace0;
+        }
+        .mat-list-icon {
+          width: 48px;
+          height: 24px;
+        }
       }
     }
 
@@ -58,12 +65,8 @@
   margin: 16px;
 }
 
-.current, .active {
-  margin: -1px;
-  border: 1px solid #23ace0;
-}
-
 .current {
+  border: 1px solid #23ace0;
   padding: 5px;
   .mat-icon {
     margin: 0 10px 0 16px;

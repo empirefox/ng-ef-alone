@@ -32,11 +32,11 @@ interface ViewPayItem {
 }
 
 @Component({
-  selector: 'ef-pay-mobile',
-  templateUrl: './pay-mobile.component.html',
-  styleUrls: ['./pay-mobile.component.scss']
+  selector: 'ef-pay',
+  templateUrl: './pay.component.html',
+  styleUrls: ['./pay.component.scss']
 })
-export class PayMobileComponent implements OnInit, OnDestroy {
+export class PayComponent implements OnInit, OnDestroy {
 
   @Input() user: PayUser;
   @Input() order: PayOrder;
@@ -76,7 +76,7 @@ export class PayMobileComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.keyControl = new FormControl('', [Validators.required, Validators.pattern(this.config.paykeyPattern)]);
 
-    this.xlangJsonService.load(this.config.tplXjsonId).takeUntil(this.ngUnsubscribe).subscribe(tplTr => {
+    this.xlangJsonService.load(this.config.tplXjsonId).takeUntil(this.ngUnsubscribe).subscribe(({ json: tplTr, lang }) => {
       this.items = (<string[]>tplTr.methods).map<ViewPayItem>(m => {
         const method: PayMethod = PayMethod[m];
         const accepted = this.enable & this.order.accept & method;

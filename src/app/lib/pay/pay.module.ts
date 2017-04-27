@@ -19,7 +19,7 @@ import { SVG4E_DEP, Svg4eModule } from '../svg4e';
 import { PAY_HTTP } from './models/token';
 import { PayConfig } from './models';
 import { WxService, PayService } from './services';
-import { PayMobileComponent } from './mobile/pay-mobile.component';
+import { PayComponent } from './pay/pay.component';
 
 @NgModule({
   imports: [
@@ -36,7 +36,7 @@ import { PayMobileComponent } from './mobile/pay-mobile.component';
     ErrorModule,
     Svg4eModule,
   ],
-  declarations: [PayMobileComponent],
+  declarations: [PayComponent],
   exports: [
     ReactiveFormsModule,
     MdButtonModule,
@@ -49,7 +49,7 @@ import { PayMobileComponent } from './mobile/pay-mobile.component';
 
     ErrorModule,
     Svg4eModule,
-    PayMobileComponent,
+    PayComponent,
   ]
 })
 export class PayModule {

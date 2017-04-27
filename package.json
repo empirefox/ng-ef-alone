@@ -28,6 +28,7 @@
     "qrcanvas": "^1.0.3",
     "raven-js": "^3.14.0",
     "rollbar-browser": "^1.9.4",
+    "show-js-error": "^1.9.0",
     "ua-parser-js": "^0.7.12"
   },
   "devDependencies": {

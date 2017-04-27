@@ -1,14 +1,15 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Response } from '@angular/http';
 import { MdSidenav } from '@angular/material';
 
 import { PayUser, PayOrder, PayMethod } from './lib/pay';
-import { PayService } from './demo';
+import { PayService, DEMO_ROUTER_LINKS } from './demo';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class AppComponent {
   @ViewChild(MdSidenav) paySidenav: MdSidenav;
@@ -21,6 +22,8 @@ export class AppComponent {
   };
   order: PayOrder;
   enable = PayMethod.WEPAY_CASH;
+
+  navItems = Object.keys(DEMO_ROUTER_LINKS);
 
   private sub: any;
 

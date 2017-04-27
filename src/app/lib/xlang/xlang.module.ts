@@ -2,9 +2,9 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { HttpModule } from '@angular/http';
 
 import { ReporterModule } from '../reporter';
+import { XlangJsonConfig } from './types';
 import { DEFAULT_XLANG, XLANG_JSON_CONFIGS } from './token';
 import { XlangService } from './xlang.service';
-import { XlangJsonConfig } from './xlang-json.config';
 import { XlangJsonService } from './xlang-json.service';
 
 @NgModule({

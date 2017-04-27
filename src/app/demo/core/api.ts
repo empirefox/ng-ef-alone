@@ -1,7 +1,7 @@
 import { apis } from './api/api';
 
 export * from './api/api';
-export * from './api/go-consts/enum/ErrorsParser.enum';
+export * from './api/go-consts/enum';
 export * from './api/trans';
 export * from './api/go-consts/pipe';
 

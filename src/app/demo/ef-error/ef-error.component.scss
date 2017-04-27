@@ -1,0 +1,10 @@
+.server-errors {
+  margin: 20px;
+  border: 1px dotted #785;
+  .err-group, .err-name, .err-items, .err-item {
+    color: #920707;
+  }
+  .my-group, .my-name, .my-items {
+    color: #ea245f;
+  }
+}

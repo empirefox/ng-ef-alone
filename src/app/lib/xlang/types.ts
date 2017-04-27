@@ -3,3 +3,8 @@ export interface XlangJsonConfig {
   langs: string[];
   urlTemplate: string; // '/i18n/xlang.${ lang }.json'
 }
+
+export interface XlangResult {
+  lang: string;
+  json: any;
+}

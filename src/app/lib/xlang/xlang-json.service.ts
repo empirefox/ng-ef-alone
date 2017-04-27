@@ -1,11 +1,12 @@
 import { Inject, Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import template from 'lodash-es/template';
 
+import { responseToError } from '../common';
 import { RemoteErrorService } from '../reporter';
+import { XlangJsonConfig, XlangResult } from './types';
 import { XLANG_JSON_CONFIGS } from './token';
-import { XlangJsonConfig } from './xlang-json.config';
 import { XlangService } from './xlang.service';
 
 @Injectable()
@@ -15,47 +16,81 @@ export class XlangJsonService {
   constructor(
     http: Http,
     private remoteErrorService: RemoteErrorService,
-    xlangService: XlangService,
+    private xlangService: XlangService,
     @Inject(XLANG_JSON_CONFIGS) configs: XlangJsonConfig[]) {
-    configs.forEach(config => this.loaders.set(config.id, new XlangJsonLoader(http, xlangService, config, this.report.bind(this))));
+    configs.forEach(config => this.loaders.set(config.id, new XlangJsonLoader(http, xlangService, config, remoteErrorService)));
   }
 
-  load(id: any): Observable<any> {
+  load(id: any, lang?: string): Observable<XlangResult> {
     if (!this.loaders.has(id)) {
       throw new Error(`XlangJsonLoader for "${id}" not found`);
     }
-    return this.loaders.get(id).load();
+    if (lang) {
+      return this.loaders.get(id).load(lang);
+    }
+    return this.xlangService.lang$.mergeMap(lang0 => {
+      return this.loaders.get(id).load(lang0);
+    });
   }
 
-  private report(err: any, caught: Observable<any>): Observable<any> {
-    this.remoteErrorService.error(err);
-    return caught;
+  takeAll(ids: Dict<any>, lang?: string): Observable<Dict<any>> {
+    if (!ids) {
+      return Observable.of({});
+    }
+    const keys = Object.keys(ids);
+    if (!keys.length) {
+      return Observable.of({});
+    }
+
+    if (lang) {
+      return this.getAll(ids, keys, lang);
+    }
+    return this.xlangService.lang$.mergeMap(lang0 => this.getAll(ids, keys, lang0));
+  }
+
+  private getAll(ids: Dict<any>, keys: string[], lang0: string): Observable<Dict<any>> {
+    const xvalues = keys.map(key => {
+      const id = ids[key];
+      if (!this.loaders.has(id)) {
+        throw new Error(`XlangJsonLoader for "${id}" not found`);
+      }
+      return this.loaders.get(id).load(lang0).take(1);
+    });
+    return Observable.forkJoin(...xvalues).map(values => {
+      const jsons: Dict<any> = {};
+      keys.forEach((key, i) => jsons[key] = values[i].json);
+      return jsons;
+    });
   }
 
 }
 
 export class XlangJsonLoader {
   private url: ({ lang: string }) => string;
-  private jsons = new Map<string, Observable<any>>();
+  private jsons = new Map<string, Observable<XlangResult>>();
 
   constructor(
     private http: Http,
     private xlangService: XlangService,
     private config: XlangJsonConfig,
-    private report: (err: any, caught: Observable<any>) => Observable<any>) {
+    private remoteErrorService: RemoteErrorService) {
     this.url = template(this.config.urlTemplate);
   }
 
-  load(): Observable<any> {
-    return this.xlangService.lang$.mergeMap(lang0 => {
-      if (!this.jsons.has(lang0)) {
-        const lang = this.findLand([lang0, this.xlangService.defaultLang], this.config.langs);
-        const json = this.http.get(this.url({ lang })).map(res => res.json()).catch(this.report).publishReplay(1).refCount();
-        this.jsons.set(lang, json);
-        this.jsons.set(lang0, json);
-      }
-      return this.jsons.get(lang0);
-    });
+  load(lang0: string): Observable<XlangResult> {
+    if (!this.jsons.has(lang0)) {
+      const lang = this.findLand([lang0, this.xlangService.defaultLang], this.config.langs);
+      const json = this.http.get(this.url({ lang }))
+        .map(res => ({ lang, json: res.json() }))
+        .catch((err: any, caught: Observable<any>) => {
+          this.remoteErrorService.error(responseToError(err));
+          // return undefined to prevent endless request loop.
+          return Observable.of();
+        }).publishReplay(1).refCount();
+      this.jsons.set(lang, json);
+      this.jsons.set(lang0, json);
+    }
+    return this.jsons.get(lang0);
   }
 
   findLand(langs: string[], all: string[]): string {

@@ -21,7 +21,7 @@ export class FieldsErrors {
   get array(): FormattedFieldErrors[] {
     if (!this._array) {
       const keys = Object.keys(this.dict).filter(key => key && key !== unparsedKey);
-      this._array = [unparsedKey, '', ...keys].map(key => this.dict[key]);
+      this._array = [unparsedKey, '', ...keys].map(key => this.dict[key]).filter(item => item);
     }
     return this._array;
   }

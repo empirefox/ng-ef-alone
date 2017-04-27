@@ -1,0 +1,32 @@
+<p>
+  wepay inline:
+  <button md-mini-fab>
+    <md-icon class="md-24">
+      <svg [efSymbol]="efSymbol"></svg>
+    </md-icon>
+  </button>
+</p>
+<p>
+  wepay(external will not show):
+  <button md-mini-fab>
+    <md-icon class="md-24">
+      <svg [efSymbol]="efSymbol" [href]="true"></svg>
+    </md-icon>
+  </button>
+</p>
+<p>
+  alipay(external will not show):
+  <button md-mini-fab>
+    <md-icon class="md-24">
+      <svg [efSymbol]="efSymbol" [href]="href"></svg>
+    </md-icon>
+  </button>
+</p>
+<p>
+  alipay(external will not show):
+  <button md-mini-fab>
+    <md-icon class="md-24">
+      <svg efSymbol [href]="href"></svg>
+    </md-icon>
+  </button>
+</p>

@@ -1,0 +1,37 @@
+body {
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+
+  // Helps fonts on OSX looks more consistent with other systems
+  // Isn't currently in button styles due to performance concerns
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .demo-root {
+    .mat-sidenav {
+      min-width: 15vw;
+      background-color: #f0e68c;
+
+      .active {
+        color: #03904c;
+      }
+
+      .mat-button {
+        width: 100%;
+        position: relative;
+        bottom: 0;
+        margin: 24px 0;
+      }
+    }
+
+    .demo-main {
+      padding: 20px;
+    }
+  }
+
+}
+
+.mat-sidenav-container .pay .mat-sidenav {
+  width: 100%;
+}

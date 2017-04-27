@@ -1,6 +1,6 @@
-<div *ngIf="show" [ngClass]="styles.groupClass">
-  <div *ngIf="styles.showName" [ngClass]="styles.fieldNameClass">{{field.name}}</div>
-  <div [ngClass]="styles.itemsClass">
-    <div *ngFor="let item of field.errors" [ngClass]="styles.itemClass">{{item}}</div>
+<div *ngIf="show" [ngClass]="ss.groupClass">
+  <div *ngIf="ss.showName" [ngClass]="ss.fieldNameClass">{{field.name}}</div>
+  <div [ngClass]="ss.itemsClass">
+    <div *ngFor="let item of field.errors" [ngClass]="ss.itemClass">{{item}}</div>
   </div>
 </div>
