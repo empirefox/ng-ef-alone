@@ -10,9 +10,10 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
+    "demo-g": "run-s \"ng g module demo/ef-{1} --routing\" \"ng g component demo/ef-{1}/ --spec=false\" --",
     "replace-domain": "node ./tools/replace-domain `qshell -m domains sand`",
     "replace": "npm run replace-domain",
-    "qiniu": "qshell -m qupload ./.qshell/account.json"
+    "qiniu": "qshell -m qupload 2 ./.qshell/account.json"
   },
   "private": true,
   "dependencies": {
@@ -32,7 +33,7 @@
     "qrcanvas": "^1.0.3",
     "raven-js": "^3.14.0",
     "rollbar-browser": "^1.9.4",
-    "show-js-error": "^1.9.0",
+    "show-js-error": "^1.10.0",
     "ua-parser-js": "^0.7.12"
   },
   "devDependencies": {
@@ -59,6 +60,7 @@
     "karma-coverage-istanbul-reporter": "^0.2.0",
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
+    "npm-run-all": "^4.0.2",
     "protractor": "~5.1.0",
     "qshell-cli": "^2.0.5",
     "replace-in-file": "^2.5.0",

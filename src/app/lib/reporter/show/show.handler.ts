@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
+import * as showJSError from 'show-js-error/dist/show-js-error.custom';
 
 import { RemoteErrorHandler } from '../core';
-
-const showJSError = window['showJSError'];
 
 // only should be used in dev mode.
 @Injectable()
